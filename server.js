@@ -12,10 +12,22 @@ app.get('/', function (request, response) {
 
 app.get('/word-image/:word', function (request, response) {
     try {
-        if (!request.params.word || request.params.word.length <= 4)
+        if (!request.params.word || request.params.word.length <= 3)
             throw 'invalid arguments';
         image(request.params.word).then(data => {
-            response.status(200).send(data);
+            data.href = "https://wordinfo.info/words/images/" + data.href;
+            response.format({
+                'text/html': function () {
+                    let image = `<img src=${data.href}>`;
+                    response.status(200).send(image);
+                },
+                'application/json': function () {
+                    response.status(200).send(JSON.stringify(data));
+                },
+                'text/plain': function () {
+                    response.status(200).send(JSON.stringify(data));
+                }
+            })
         }, error => {
             response.status(404).send({
                 message: 'image not found'
