@@ -7,7 +7,7 @@ checkForImage = (name) => {
         rp(urls)
             .then(function (html) {
                 const $ = cheerio.load(html);
-                let param = 'a:contains(' + name + '.jpg)';
+                let param = 'a:contains(' + name + ')';
                 let data = $(param).toArray()[0];
                 resolve(data.attribs);
             })
